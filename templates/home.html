@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+<form method="post" class="buttons">
+    <h3>Enter The Chat Room</h3>
+    <div>
+        <label for="">Name:</label>
+        <input
+            type="text"
+            placeholder="Pick a name!"
+            name="name"
+            value="{{name}}"
+        />
+    </div>
+    <div class="join">
+        <input type="text" placeholder="Room code" name="code" value="{{code}}"/>
+        <button type="submit" name="join">Join a Room!</button>
+    </div>
+    <button type="submit" name="create" class="create-btn">Create a Room!</button>
+    {% if error %}
+    <ul>
+        <li>{{error}}</li>
+    </ul>
+    {% endif %}
+
+    <div class="local-rooms">
+        <h3>Local Rooms</h3>
+        <ul id="room-list">
+            <!-- rooms will show up here. -->
+        </ul>
+    </div>
+</form>
+
+<script>
+    function updateRoomList() {
+        fetch('/api/rooms')
+            .then(response => response.json())
+            .then(rooms => {
+                const list = document.getElementById('room-list');
+                list.innerHTML = '';
+                rooms.forEach(room => {
+                    const li = document.createElement('li');
+                    li.className = 'room-item';
+                    li.innerHTML = `
+                    <button onclick="joinRoom('${room}')">
+                        ${room} - Join
+                    </button>
+                `;
+                list.appendChild(li);
+                });
+            });
+    }
+
+    function joinRoom(roomCode) {
+        document.querySelector('input[name="code"]').value = roomCode;
+    }
+
+    // update the room list every 10 seconds.
+    setInterval(updateRoomList, 10000);
+    updateRoomList();
+</script>
+{% endblock %}
