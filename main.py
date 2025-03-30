@@ -25,7 +25,8 @@ def generate_unique_code(length):
 # API endpoint that returns available rooms in JSON.
 @app.route("/api/rooms")
 def get_rooms():
-    return jsonify(list(rooms.keys()))
+    unlocked_rooms = [code for code, room_data in rooms.items() if not room_data.get("locked", False)]
+    return jsonify(unlocked_rooms)
 
 # home page route. handles room creation and joining existing rooms.
 @app.route("/", methods=["GET", "POST"])

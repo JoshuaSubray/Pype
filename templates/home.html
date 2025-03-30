@@ -52,16 +52,31 @@
             .then(rooms => {
                 const list = document.getElementById('room-list');
                 list.innerHTML = '';
+                
+                if (rooms.length === 0) {
+                    list.innerHTML = '<li class="no-rooms">No unlocked rooms available</li>';
+                    return;
+                }
+
                 rooms.forEach(room => {
-                    const li = document.createElement('li');
-                    li.className = 'room-item';
-                    const lockIcon = roomData.locked ? '🔐' : '🔓';
-                    li.innerHTML = `
-                    <button onclick="joinRoom('${room}')">
-                        ${room} - Join
-                    </button>
-                `;
-                list.appendChild(li);
+                    fetch(`/api/room/${room}`)
+                        .then(res => res.json())
+                        .then(roomData => {
+                            // Only display if room exists and is unlocked
+                            if (roomData && !roomData.locked) {
+                                const li = document.createElement('li');
+                                li.className = 'room-item';
+                                li.innerHTML = `<div class="room-info">
+                                        <span class="room-name">${room}</span>
+                                        <small class="room-meta">Members: ${roomData.members}</small>
+                                    </div>
+                                    <button onclick="joinRoom('${room}')" class="join-room-btn">
+                                        Join
+                                    </button>
+                                `;
+                                list.appendChild(li);
+                            }
+                        });
                 });
             });
     }

@@ -420,3 +420,24 @@ body {
   border-radius: 8px;
   border-left: 4px solid var(--custom-leave-btn);
 }
+
+.no-rooms {
+  color: var(--custom-muted);
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+}
+
+.join-room-btn {
+  background: var(--custom-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.join-room-btn:hover {
+  background: var(--custom-primary-hover);
+}
