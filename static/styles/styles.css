@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --custom-bg: #1a1a1a;
     --custom-card-bg: #2d2d2d;
     --custom-border: #444;
@@ -9,22 +9,22 @@
     --custom-primary-hover: #4a85e5;
     --custom-secondary: #3eb85d;
     --custom-secondary-hover: #2ea84d
-}
-
-/* [data-bs-theme="dark"] {
-    --custom-bg: #1a1a1a;
-    --custom-card-bg: #2d2d2d;
-    --custom-border: #444;
-    --custom-text: #f0f0f0;
-    --custom-muted: #aaa;
-    --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --custom-primary: #5a95f5;
-    --custom-primary-hover: #4a85e5;
-    --custom-secondary: #3eb85d;
-    --custom-secondary-hover: #2ea84d;
 } */
 
-[data-bs-theme="light"] {
+:root {
+  /* Dark Blue-Grey Theme */
+  --custom-bg: #232d3f;           /* Dark slate blue background */
+  --custom-card-bg: #2d3748;      /* Darker blue-grey cards */
+  --custom-border: #4a5568;       /* Medium blue-grey borders */
+  --custom-text: #2384f3c7;         /* Light blue-grey text (better contrast) */
+  --custom-accent: #63b3ed;       /* Bright blue for accents */
+  --custom-muted: #a0aec0;        /* Muted blue-grey */
+  --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --custom-primary: #4299e1;      /* Vibrant blue */
+  --custom-primary-hover: #3182ce;
+}
+
+/* [data-bs-theme="light"] {
     --custom-bg: #f0f2f5;
     --custom-card-bg: white;
     --custom-border: #dfe1e5;
@@ -35,6 +35,19 @@
     --custom-primary-hover: #3367d6;
     --custom-secondary: #34a853;
     --custom-secondary-hover: #2d9249;
+} */
+
+[data-bs-theme="light"] {
+  /* Light Blue-Grey Theme */
+  --custom-bg: #f8fafc;           /* Very light grey-blue */
+  --custom-card-bg: #ffffff;      /* Pure white cards */
+  --custom-border: #e2e8f0;       /* Light blue-grey border */
+  --custom-text: #2d3748;         /* Dark blue-grey text */
+  --custom-accent: #3182ce;       /* Deep blue accents */
+  --custom-muted: #718096;        /* Medium blue-grey */
+  --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --custom-primary: #4299e1;
+  --custom-primary-hover: #3182ce;
 }
 
 html {
@@ -43,13 +56,15 @@ html {
 
 /* Base Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif, -apple-system;
     /* background-color: #f0f2f5; */
+    font-weight: bold;
     background-color: var(--custom-bg);
     margin: 0;
     padding: 20px;
     /* color: #333; */
     color: var(--custom-text);
+    line-height: 1.6;
   }
   
   /* Main Content Container */
