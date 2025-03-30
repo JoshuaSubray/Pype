@@ -1,33 +1,35 @@
 {% extends 'base.html' %} {% block content %}
 <form method="post" class="buttons">
-    <h3>Enter The Chat Room</h3>
-    <div>
-        <label for="">Name:</label>
+    <h3 style="color: var(--custom-accent); margin-bottom: 20px;">Enter The Chat Room</h3>
+    <div style="width: 100%;">
+        <label style="display: block; margin-bottom: 8px; color: var(--custom-text);">Name:</label>
         <input
             type="text"
             placeholder="Pick a name!"
             name="name"
             value="{{name}}"
+            class="name-input"
         />
     </div>
     <div class="join">
-        <input type="text" placeholder="Room code" name="code" value="{{code}}"/>
-        <button type="submit" name="join">Join a Room!</button>
+        <input type="text" placeholder="Room code" name="code" value="{{code}}" class="room-code-input"/>
+        <button type="submit" name="join" class="btn join-btn">Join a Room</button>
     </div>
     <button type="submit" name="create" class="create-btn">Create a Room!</button>
     {% if error %}
-    <ul>
-        <li>{{error}}</li>
-    </ul>
+    <div class="error-message">
+        {{error}}
+    </div>
     {% endif %}
 
-    <div class="local-rooms">
-        <h3>Local Rooms</h3>
-        <ul id="room-list">
-            <!-- rooms will show up here. -->
-        </ul>
-    </div>
 </form>
+
+<div class="local-rooms">
+    <h3 style="color: var(--custom-accent);">Active Rooms</h3>
+    <ul id="room-list">
+        <!-- rooms will show up here. -->
+    </ul>
+</div>
 
 <script>
     function updateRoomList() {
@@ -51,6 +53,7 @@
 
     function joinRoom(roomCode) {
         document.querySelector('input[name="code"]').value = roomCode;
+        document.querySelector('button[name="join"]').click();
     }
 
     // update the room list every 10 seconds.

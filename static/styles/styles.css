@@ -14,7 +14,7 @@
 :root {
   /* Dark Blue-Grey Theme */
   --custom-bg: #232d3f;           /* Dark slate blue background */
-  --custom-card-bg: #2384f3c7;      /* Darker blue-grey cards */
+  --custom-card-bg: #2d75c700;      /* Darker blue-grey cards */
   --custom-border: #4a5568;       /* Medium blue-grey borders */
   --custom-text: #5e8ff0c7;         /* Light blue-grey text (better contrast) */
   --custom-accent: #63b3ed;       /* Bright blue for accents */
@@ -103,38 +103,79 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     width: 100%;
     max-width: 500px;
+    padding: 30px;
+    background-color: var(--custom-card-bg);
+    border-radius: 12px;
+    box-shadow: var(--custom-shadow);
   }
   
   .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
     text-align: center;
+    font-family: 'Comic Sans MS', sans-serif;
+    box-shadow: var(--custom-shadow);
   }
   
   .create-btn {
-    background-color: #4285f4;
+    background-color: var(--custom-primary);
     color: white;
+    border: 2px solid var(--custom-primary);
+    border-radius: 22px;
+    white-space: nowrap;
   }
   
   .create-btn:hover {
-    background-color: #3367d6;
+    background-color: var(--custom-primary-hover);
+    transform: translateY(-2px);
   }
   
+  .join {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
   .join-btn {
-    background-color: #34a853;
-    color: white;
+    background-color: var(--custom-card-bg);
+    color: var(--custom-primary);
+    border: 2px solid var(--custom-primary);
+    white-space: nowrap;
+  }
+
+  /* .join button {
+    white-space: nowrap;
+  } */
+
+  .join input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid var(--custom-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--custom-card-bg);
+    color: var(--custom-text);
+    transition: all 0.3s ease;
+  }
+
+  .join input:focus {
+    border-color: var(--custom-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
   }
   
   .join-btn:hover {
-    background-color: #2d9249;
+    background-color: var(--custom-primary);
+    color: white;
+    transform: translateY(-2px);
   }
   
   /* Message Box Styles */
@@ -222,13 +263,12 @@ body {
   
   /* Room List Styles */
   .local-rooms {
-    margin: 20px 0;
+    margin-top: 30px; /* Extra space above rooms */
+    width: 100%;
     padding: 20px;
-    background: white;
+    background-color: var(--custom-card-bg);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 90vw;
-    max-width: 800px;
+    box-shadow: var(--custom-shadow);
   }
   
   #room-list {
@@ -247,6 +287,14 @@ body {
     justify-content: space-between;
     align-items: center;
     transition: transform 0.2s;
+  }
+
+  .room-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between form and rooms */
+    width: 100%;
+    max-width: 500px; /* Match form width */
   }
   
   .room-item:hover {
@@ -363,4 +411,12 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+}
+
+.error-message {
+  color: var(--custom-leave-btn);
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid var(--custom-leave-btn);
 }
