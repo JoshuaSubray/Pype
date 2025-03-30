@@ -1,6 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <div class="message-box">
     <h2>Chat Room: {{code}}</h2>
+    <div class="room-controls">
+        <button id="lock-btn" class="lock-btn" onclick="toggleRoomLock()">
+            <span id="lock-icon">🔓</span> <span id="lock-text">Lock Room</span>
+        </button>   
     <button onclick="leaveRoom()" class="leave-btn"><i class="bi bi-box-arrow-right"></i>Leave Room</button>
     <div class="messages" id="messages"></div>
     <div class="inputs">
@@ -16,9 +20,89 @@
         </button>
     </div>
 </div>
+
+<div id="password-modal" class="modal">
+    <div class="modal-content">
+        <h3>Make Room Password</h3>
+        <input type="password" id="room-password" placeholder="Enter password">
+        <div class="modal-buttons">
+            <button onclick="confirmLock()">Confirm</button>
+            <button onclick="cancelLock()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var socketio = io();
+    const roomCode = "{{code}}";
+    const userName = "{{session.get('name')}}";
 
+    let isCreator = false;
+
+    fetch(`/api/room/${roomCode}`)
+        .then(res => res.json())
+        .then(roomData => {
+            isCreator = roomData.creator === userName;
+            updateLockButton(roomData.locked);
+            
+            // Hide lock button if not creator
+            if (!isCreator) {
+                document.getElementById('lock-btn').style.display = 'none';
+        }
+    });
+
+    function updateLockButton(isLocked) {
+        const lockIcon = document.getElementById('lock-icon');
+        const lockText = document.getElementById('lock-text');
+        
+        if (isLocked) {
+            lockIcon.textContent = '🔐';
+            lockText.textContent = 'Unlock Room';
+        } else {
+            lockIcon.textContent = '🔓';
+            lockText.textContent = 'Lock Room';
+        }
+    }
+
+    function toggleRoomLock() {
+        if (!isCreator) return;
+        
+        // Show password modal when locking
+        const modal = document.getElementById('password-modal');
+        modal.style.display = 'block';
+    }
+    
+    function confirmLock() {
+        const password = document.getElementById('room-password').value;
+        const modal = document.getElementById('password-modal');
+        
+        fetch(`/api/room/${roomCode}/lock`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: userName,
+                password: password
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                updateLockButton(data.locked);
+                modal.style.display = 'none';
+                document.getElementById('room-password').value = '';
+            } else {
+                alert(data.error || 'Failed to toggle lock status');
+            }
+        });
+    }
+
+    function cancelLock() {
+        document.getElementById('password-modal').style.display = 'none';
+        document.getElementById('room-password').value = '';
+    }
+    
     const messages = document.getElementById("messages");
 
     const createMessage = (name, msg) => {

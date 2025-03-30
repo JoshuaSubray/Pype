@@ -36,6 +36,7 @@ def home():
         code = request.form.get("code") # get room code input.
         join = request.form.get("join", False) # checks if user wants to join a room.
         create = request.form.get("create", False) # checks if user wants to create a new room.
+        password = request.form.get("password", "")  # Add password field for locked rooms
 
         # input validation.
         if not name:
@@ -47,9 +48,16 @@ def home():
         room = code
         if create != False: # creates a new room.
             room = generate_unique_code(4)
-            rooms[room] = {"members": 0, "messages": []}
+            rooms[room] = {"members": 0, "messages": [], "locked" : False, "password" : "", "creator" : name}
         elif code not in rooms: # check if the room already exists.
             return render_template("home.html", error="Room not found.", code=code, name=name, available_rooms=list(rooms.keys()))
+        elif rooms[code]["locked"]:  # Check if room is locked
+            if password != rooms[code]["password"]:  # Verify password
+                return render_template("home.html", 
+                    error="Room is locked. Incorrect password.", 
+                    code=code, 
+                    name=name,
+                    show_password_field=True)
         
         # store room and username in session data and redirect to chat room page.
         session["room"] = room
@@ -68,6 +76,40 @@ def room():
         return redirect(url_for("home"))
     
     return render_template("room.html", code=room, messages=rooms[room]["messages"])
+
+@app.route("/api/room/<room_code>/lock", methods=["POST"])
+def toggle_room_lock(room_code):
+    if room_code not in rooms:
+        return jsonify({"success": False, "error": "Room not found"})
+    
+    data = request.get_json()
+    name = data.get("name")
+    password = data.get("password", "")
+
+    if name != rooms[room_code]["creator"]:
+        return jsonify({"success": False, "error": "Only room creator can lock/unlock"})
+    
+    rooms[room_code]["locked"] = not rooms[room_code]["locked"]
+    if rooms[room_code]["locked"]:
+        rooms[room_code]["password"] = password
+
+    return jsonify({
+        "success": True,
+        "locked": rooms[room_code]["locked"],
+        "message": f"Room {'locked' if rooms[room_code]['locked'] else 'unlocked'}"
+    })
+
+@app.route("/api/room/<room_code>")
+def get_room_status(room_code):
+    if room_code not in rooms:
+        return jsonify({"error": "Room not found"}), 404
+    
+    return jsonify({
+        "code": room_code,
+        "locked": rooms[room_code]["locked"],
+        "members": rooms[room_code]["members"],
+        "creator": rooms[room_code]["creator"]
+    })
 
 # handle incoming chat messages through websocket and display them in the room.
 @socketio.on("message")

@@ -15,6 +15,20 @@
         <input type="text" placeholder="Room code" name="code" value="{{code}}" class="room-code-input"/>
         <button type="submit" name="join" class="btn join-btn">Join a Room</button>
     </div>
+
+    {% if show_password_field %}
+    <div style="width: 100%; margin-top: 15px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--custom-text);">Password:</label>
+        <input
+            type="password"
+            placeholder="Room password"
+            name="password"
+            class="password-input"
+            required
+        />
+    </div>
+    {% endif %}
+
     <button type="submit" name="create" class="create-btn">Create a Room!</button>
     {% if error %}
     <div class="error-message">
@@ -41,6 +55,7 @@
                 rooms.forEach(room => {
                     const li = document.createElement('li');
                     li.className = 'room-item';
+                    const lockIcon = roomData.locked ? '🔐' : '🔓';
                     li.innerHTML = `
                     <button onclick="joinRoom('${room}')">
                         ${room} - Join
