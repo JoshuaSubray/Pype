@@ -11,6 +11,19 @@
     --custom-secondary-hover: #2ea84d
 } */
 
+/* [data-bs-theme="light"] {
+    --custom-bg: #f0f2f5;
+    --custom-card-bg: white;
+    --custom-border: #dfe1e5;
+    --custom-text: #333;
+    --custom-muted: #666;
+    --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --custom-primary: #4285f4;
+    --custom-primary-hover: #3367d6;
+    --custom-secondary: #34a853;
+    --custom-secondary-hover: #2d9249;
+} */
+
 :root {
   /* Dark Blue-Grey Theme */
   --custom-bg: #232d3f;           /* Dark slate blue background */
@@ -26,18 +39,7 @@
   --custom-leave-btn-hover: #c0392b; 
 }
 
-/* [data-bs-theme="light"] {
-    --custom-bg: #f0f2f5;
-    --custom-card-bg: white;
-    --custom-border: #dfe1e5;
-    --custom-text: #333;
-    --custom-muted: #666;
-    --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --custom-primary: #4285f4;
-    --custom-primary-hover: #3367d6;
-    --custom-secondary: #34a853;
-    --custom-secondary-hover: #2d9249;
-} */
+
 
 [data-bs-theme="light"] {
   /* Light Blue-Grey Theme */
