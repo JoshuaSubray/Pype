@@ -102,7 +102,7 @@
         document.getElementById('password-modal').style.display = 'none';
         document.getElementById('room-password').value = '';
     }
-    
+
     const messages = document.getElementById("messages");
 
     const createMessage = (name, msg) => {
@@ -125,10 +125,17 @@
 
     const sendMessage = () => {
         const message = document.getElementById("message")
-        if (message.value == "") return;
+        if (message.value === "") return;
         socketio.emit("message", {data: message.value})
         message.value = "";
     }
+
+    document.getElementById("message").addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
 
     const leaveRoom = () => {
         socketio.emit("leave_room");

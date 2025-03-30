@@ -55,7 +55,7 @@ def home():
         elif rooms[code]["locked"]:  # Check if room is locked
             if password != rooms[code]["password"]:  # Verify password
                 return render_template("home.html", 
-                    error="Room is locked. Incorrect password.", 
+                    error="Incorrect password.", 
                     code=code, 
                     name=name,
                     show_password_field=True)
