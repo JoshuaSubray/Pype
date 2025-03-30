@@ -22,6 +22,8 @@
   --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   --custom-primary: #4299e1;      /* Vibrant blue */
   --custom-primary-hover: #3182ce;
+  --custom-leave-btn: #e74c3c;         /* Red for leave button */
+  --custom-leave-btn-hover: #c0392b; 
 }
 
 /* [data-bs-theme="light"] {
@@ -48,10 +50,26 @@
   --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --custom-primary: #4299e1;
   --custom-primary-hover: #3182ce;
+  --custom-leave-btn: #ff6b6b;         /* Softer red for light theme */
+  --custom-leave-btn-hover: #ff5252;
 }
 
 html {
     transition: background-color 0.3s, color 0.3s;
+}
+
+/* header */
+.header {
+  background-color: var(--custom-card-bg);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: var(--custom-shadow);
+}
+
+.header h2 {
+  color: var(--custom-accent);
+  margin: 0;
 }
 
 /* Base Styles */
@@ -133,6 +151,15 @@ body {
     max-width: 800px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+  }
+
+  .message-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: var(--custom-card-bg);
+    border-bottom: 1px solid var(--custom-border);
   }
   
   .messages {
@@ -302,4 +329,38 @@ body {
 .theme-text {
     display: inline-block;
     white-space: nowrap;
+}
+
+/* collective buttons styling */
+.btn, .leave-btn, .theme-toggle {
+  transition: all 0.3s ease;
+}
+
+/* leave button */
+.leave-btn {
+  background: var(--custom-leave-btn);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 600; /* Match your button style */
+}
+
+.leave-btn:hover {
+  background: var(--custom-leave-btn-hover);
+  transform: scale(1.05);
+}
+
+.btn, .leave-btn {
+  border-radius: 8px; /* Consistent with your other buttons */
+  padding: 10px 20px; /* Slightly larger padding */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }

@@ -116,6 +116,25 @@ def disconnect():
         send({"name": name, "message": "has left the room."}, to=room) # send leave message event to the room.
         print(f"{name} left room {room}.")
 
+# handles leaving rooms
+@socketio.on("leave_room")
+def handle_leave_room():
+    room = session.get("room")
+    name = session.get("name")
+    if room and name:
+        leave_room(room)
+        if room in rooms:
+            rooms[room]["members"] -= 1
+            send({"name": name, "message": "has left the room"}, to=room)
+            if rooms[room]["members"] <= 0:
+                del rooms[room]
+        session.clear()
+
+@app.route("/clear_session")
+def clear_session():
+    session.clear()
+    return redirect(url_for("home"))
+
 # initialization.
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", debug=True)

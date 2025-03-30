@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <div class="message-box">
     <h2>Chat Room: {{code}}</h2>
+    <button onclick="leaveRoom()" class="leave-btn"><i class="bi bi-box-arrow-right"></i>Leave Room</button>
     <div class="messages" id="messages"></div>
     <div class="inputs">
         <input
@@ -44,6 +45,15 @@
         socketio.emit("message", {data: message.value})
         message.value = "";
     }
+
+    const leaveRoom = () => {
+        socketio.emit("leave_room");
+        fetch("/clear_session", { method: "POST" })
+          .then(() => {
+            window.location.href = "{{ url_for('home') }}";
+          });
+      };
+
 </script>
 
 <!-- dynamically call createMessage for every message in message history. -->
