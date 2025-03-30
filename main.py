@@ -1,11 +1,30 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask_socketio import join_room, leave_room, send, emit, SocketIO
 import random
 from string import ascii_uppercase
+from flask_pymongo import PyMongo
+from datetime import datetime
+import os
+from dotenv import load_dotenv
 
+# Flask configuration.
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "1234"
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# MongoDB configuration.
+load_dotenv() # loads environment variables from .env file.
+mongo_uri = os.getenv("MONGO_URI")
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+mongo = PyMongo(app)
+
+# try to connect to MongoDB. if it fails, use in-memory database.
+mongo = None
+try:
+    mongo = PyMongo(app)
+    print("Connected to MongoDB.")
+except Exception as e:
+    print(f"Failed to connect to MongoDB: {e}")
 
 # stores active rooms with member count and message history.
 rooms = {}
@@ -67,7 +86,17 @@ def room():
     if room is None or session.get("name") is None or room not in rooms:
         return redirect(url_for("home"))
     
-    return render_template("room.html", code=room, messages=rooms[room]["messages"])
+    # load chat rooms history, sorted by timestamp.
+    if mongo: # If DB is available, load messages from database.
+        history = list(mongo.db.rooms.find({"room": room}).sort("timestamp", 1))
+    else: # If DB is not available, load messages from in-memory database.
+        history = rooms[room]["messages"]
+
+    # convert ObjectId to string.
+    for msg in history:
+        msg['_id'] = str(msg['_id'])
+
+    return render_template("room.html", code=room, messages=history)
 
 # handle incoming chat messages through websocket and display them in the room.
 @socketio.on("message")
@@ -78,11 +107,17 @@ def message(data):
     
     content = {
          "name": session.get("name"),
-         "message": data["data"]
+         "message": data["data"],
+         "room": room,
+         "timestamp": datetime.utcnow().isoformat()
     }
+
     send(content, to=room) # send message to the room.
     rooms[room]["messages"].append(content) # save message in chat history.
-    print(f"{session.get('name')} said: {data['data']}")
+
+    if mongo: # If DB is available, save message to database.
+        mongo.db.rooms.insert_one(content)
+    print(f"{session.get('name')}: {data['data']}")
 
 # handle user connection to a room.
 @socketio.on("connect")
