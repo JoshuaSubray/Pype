@@ -1,33 +1,49 @@
 {% extends 'base.html' %} {% block content %}
 <form method="post" class="buttons">
-    <h3>Enter The Chat Room</h3>
-    <div>
-        <label for="">Name:</label>
+    <h3 style="color: var(--custom-accent); margin-bottom: 20px;">Enter The Chat Room</h3>
+    <div style="width: 100%;">
+        <label style="display: block; margin-bottom: 8px; color: var(--custom-text);">Name:</label>
         <input
             type="text"
             placeholder="Pick a name!"
             name="name"
             value="{{name}}"
+            class="name-input"
         />
     </div>
     <div class="join">
-        <input type="text" placeholder="Room code" name="code" value="{{code}}"/>
-        <button type="submit" name="join">Join a Room!</button>
+        <input type="text" placeholder="Room code" name="code" value="{{code}}" class="room-code-input"/>
+        <button type="submit" name="join" class="btn join-btn">Join a Room</button>
     </div>
-    <button type="submit" name="create" class="create-btn">Create a Room!</button>
-    {% if error %}
-    <ul>
-        <li>{{error}}</li>
-    </ul>
+
+    {% if show_password_field %}
+    <div style="width: 100%; margin-top: 15px;">
+        <label style="display: block; margin-bottom: 8px; color: var(--custom-text);">Password:</label>
+        <input
+            type="password"
+            placeholder="Room password"
+            name="password"
+            class="password-input"
+            required
+        />
+    </div>
     {% endif %}
 
-    <div class="local-rooms">
-        <h3>Local Rooms</h3>
-        <ul id="room-list">
-            <!-- rooms will show up here. -->
-        </ul>
+    <button type="submit" name="create" class="create-btn">Create a Room!</button>
+    {% if error %}
+    <div class="error-message">
+        {{error}}
     </div>
+    {% endif %}
+
 </form>
+
+<div class="local-rooms">
+    <h3 style="color: var(--custom-accent);">Active Rooms</h3>
+    <ul id="room-list">
+        <!-- rooms will show up here. -->
+    </ul>
+</div>
 
 <script>
     function updateRoomList() {
@@ -36,21 +52,38 @@
             .then(rooms => {
                 const list = document.getElementById('room-list');
                 list.innerHTML = '';
+                
+                if (rooms.length === 0) {
+                    list.innerHTML = '<li class="no-rooms">No unlocked rooms available</li>';
+                    return;
+                }
+
                 rooms.forEach(room => {
-                    const li = document.createElement('li');
-                    li.className = 'room-item';
-                    li.innerHTML = `
-                    <button onclick="joinRoom('${room}')">
-                        ${room} - Join
-                    </button>
-                `;
-                list.appendChild(li);
+                    fetch(`/api/room/${room}`)
+                        .then(res => res.json())
+                        .then(roomData => {
+                            // Only display if room exists and is unlocked
+                            if (roomData && !roomData.locked) {
+                                const li = document.createElement('li');
+                                li.className = 'room-item';
+                                li.innerHTML = `<div class="room-info">
+                                        <span class="room-name">${room}</span>
+                                        <small class="room-meta">Members: ${roomData.members}</small>
+                                    </div>
+                                    <button onclick="joinRoom('${room}')" class="join-room-btn">
+                                        Join
+                                    </button>
+                                `;
+                                list.appendChild(li);
+                            }
+                        });
                 });
             });
     }
 
     function joinRoom(roomCode) {
         document.querySelector('input[name="code"]').value = roomCode;
+        document.querySelector('button[name="join"]').click();
     }
 
     // update the room list every 10 seconds.
