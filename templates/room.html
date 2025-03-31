@@ -40,12 +40,55 @@
     </div>
 </div>
 
+<div id="members-modal" class="modal">
+    <div class="modal-content">
+        <h3>Room Members ({{code}})</h3>
+        <div id="members-list" class="members-list">
+            <!-- Members will be populated here -->
+        </div>
+        <div class="modal-buttons">
+            <button onclick="closeMembersModal()">Close</button>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var socketio = io();
     const roomCode = "{{code}}";
     const userName = "{{session.get('name')}}";
 
     let isCreator = false;
+
+    function showMembers() {
+        fetch(`/api/room/${roomCode}/members`)
+            .then(res => res.json())
+            .then(data => {
+                const membersList = document.getElementById('members-list');
+                membersList.innerHTML = '';
+                
+                data.members.forEach(member => {
+                    const div = document.createElement('div');
+                    div.className = 'member-item';
+                    div.innerHTML = `
+                        <span>${member.name}</span>
+                        ${member.is_creator ? '<span class="creator-badge">Creator</span>' : ''}
+                    `;
+                    membersList.appendChild(div);
+                });
+                
+                document.getElementById('members-modal').style.display = 'block';
+            });
+    }
+
+    function closeMembersModal() {
+        document.getElementById('members-modal').style.display = 'none';
+    }
+
+    socketio.on("member_update", (members) => {
+        if(document.getElementById('members-modal').style.display === 'block') {
+            showMembers(); // Refresh if modal is open
+        }
+    });
 
     fetch(`/api/room/${roomCode}`)
         .then(res => res.json())

@@ -144,6 +144,16 @@ def get_room_status(room_code):
         "creator": rooms[room_code]["creator"]
     })
 
+@app.route("/api/room/<room_code>/members")
+def get_room_members(room_code):
+    if room_code not in rooms:
+        return jsonify({"error": "Room not found"}), 404
+    
+    return jsonify({
+        "members": rooms[room_code].get("members_data", []),
+        "count": rooms[room_code]["members"]
+    })
+
 # handle incoming chat messages through websocket and display them in the room.
 @socketio.on("message")
 def message(data):
@@ -180,6 +190,17 @@ def connect(auth):
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1 # increase the room's member count.
+    if "members_data" not in rooms[room]:
+        rooms[room]["members_data"] = []
+    
+    member_data = {
+        "name": name,
+        "is_creator": name == rooms[room]["creator"]
+    }
+    rooms[room]["members_data"].append(member_data)
+
+    emit("member_update", rooms[room]["members_data"], to=room)
+
     print(f"{name} joined room {room}")
 
 # handle user disconnection from a room and remove them from the room list.
