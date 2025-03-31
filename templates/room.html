@@ -3,7 +3,8 @@
     <h2>Chat Room: {{code}}</h2>
     <div class="room-controls">
         <button id="lock-btn" class="lock-btn" onclick="toggleRoomLock()">
-            <span id="lock-icon">🔓</span><span id="lock-text">Lock Room</span>
+            <span id="lock-icon">🔐</span>
+            <span id="lock-text">Lock Room</span>
         </button>
     </div>
     <div>
@@ -59,10 +60,10 @@
         const lockText = document.getElementById('lock-text');
         
         if (isLocked) {
-            lockIcon.textContent = '🔐';
+            lockIcon.textContent = '🔓';
             lockText.textContent = 'Unlock Room';
         } else {
-            lockIcon.textContent = '🔓';
+            lockIcon.textContent = '🔐';
             lockText.textContent = 'Lock Room';
         }
     }

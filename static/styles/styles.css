@@ -402,6 +402,39 @@ body {
   font-weight: 600; /* Match your button style */
 }
 
+.lock-btn {
+  background: var(--custom-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--custom-shadow);
+  font-size: 0.95rem;
+}
+
+.lock-btn:hover {
+  background: var(--custom-primary-hover);
+  transform: translateY(-2px);
+}
+
+.room-controls {
+  display: flex;
+  justify-content: flex-end; /* This pushes content to the right */
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--custom-border);
+}
+
+.lock-btn i {
+  font-size: 1.1rem;
+}
+
 .leave-btn:hover {
   background: var(--custom-leave-btn-hover);
   transform: scale(1.05);
