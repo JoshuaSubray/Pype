@@ -537,18 +537,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  margin: 5px 0;
-  background-color: var(--custom-card-bg);
-  border-radius: 6px;
+  padding: 12px 15px;
+  margin: 8px 0;
+  background-color: var(--custom-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .creator-badge {
   background-color: var(--custom-primary);
   color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 4px 12px;
+  border-radius: 15px;
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .modal-content {
@@ -557,4 +559,83 @@ body {
   border-radius: 8px;
   width: 90%;
   max-width: 400px;
+}
+
+#password-modal .modal-content {
+  background-color: var(--custom-card-bg);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+
+#room-password {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 15px 0;
+  border: 2px solid var(--custom-border);
+  border-radius: 8px;
+  background-color: var(--custom-card-bg);
+  color: var(--custom-text);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+#room-password:focus {
+  border-color: var(--custom-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons button:first-child {
+  background-color: var(--custom-primary);
+  color: white;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: var(--custom-primary-hover);
+  transform: translateY(-1px);
+}
+
+.modal-buttons button:last-child {
+  background-color: var(--custom-leave-btn);
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: var(--custom-leave-btn-hover);
+  transform: translateY(-1px);
+}
+
+/* Members Modal Enhancements */
+#members-modal .modal-content {
+  background-color: var(--custom-card-bg);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+
+#members-modal .modal-buttons button {
+  background-color: var(--custom-muted);
+  color: white;
+}
+
+#members-modal .modal-buttons button:hover {
+  background-color: var(--custom-text);
 }
