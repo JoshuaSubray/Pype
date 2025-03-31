@@ -26,38 +26,36 @@
 
 :root {
   /* Dark Blue-Grey Theme */
-  --custom-bg: #232d3f;           /* Dark slate blue background */
-  --custom-card-bg: #2d75c700;      /* Darker blue-grey cards */
-  --custom-border: #4a5568;       /* Medium blue-grey borders */
-  --custom-text: #5e8ff0c7;         /* Light blue-grey text (better contrast) */
-  --custom-accent: #63b3ed;       /* Bright blue for accents */
-  --custom-muted: #a0aec0;        /* Muted blue-grey */
+  --custom-bg: #232d3f;
+  --custom-card-bg: #2d75c700;
+  --custom-border: #4a5568;
+  --custom-text: #5e8ff0c7;
+  --custom-accent: #63b3ed;
+  --custom-muted: #a0aec0;
   --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --custom-primary: #4299e1;      /* Vibrant blue */
+  --custom-primary: #4299e1;
   --custom-primary-hover: #3182ce;
-  --custom-leave-btn: #e74c3c;         /* Red for leave button */
-  --custom-leave-btn-hover: #c0392b; 
+  --custom-leave-btn: #e74c3c;
+  --custom-leave-btn-hover: #c0392b;
 }
-
-
 
 [data-bs-theme="light"] {
   /* Light Blue-Grey Theme */
-  --custom-bg: #f8fafc;           /* Very light grey-blue */
-  --custom-card-bg: #ffffff;      /* Pure white cards */
-  --custom-border: #e2e8f0;       /* Light blue-grey border */
-  --custom-text: #2d3748;         /* Dark blue-grey text */
-  --custom-accent: #3182ce;       /* Deep blue accents */
-  --custom-muted: #718096;        /* Medium blue-grey */
+  --custom-bg: #f8fafc;
+  --custom-card-bg: #ffffff;
+  --custom-border: #e2e8f0;
+  --custom-text: #2d3748;
+  --custom-accent: #3182ce;
+  --custom-muted: #718096;
   --custom-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --custom-primary: #4299e1;
   --custom-primary-hover: #3182ce;
-  --custom-leave-btn: #ff6b6b;         /* Softer red for light theme */
+  --custom-leave-btn: #ff6b6b;
   --custom-leave-btn-hover: #ff5252;
 }
 
 html {
-    transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* header */
@@ -553,15 +551,9 @@ body {
   font-weight: 500;
 }
 
-.modal-content {
-  background-color: var(--custom-card-bg);
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-}
-
-#password-modal .modal-content {
+.modal-content,
+#password-modal .modal-content,
+#members-modal .modal-content {
   background-color: var(--custom-card-bg);
   padding: 20px;
   border-radius: 8px;
