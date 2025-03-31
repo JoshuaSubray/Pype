@@ -45,7 +45,7 @@
             isCreator = roomData.creator === userName;
             updateLockButton(roomData.locked);
             
-            // Hide lock button if not creator
+            // hide lock button if not creator.
             if (!isCreator) {
                 document.getElementById('lock-btn').style.display = 'none';
         }
@@ -67,7 +67,7 @@
     function toggleRoomLock() {
         if (!isCreator) return;
         
-        // Show password modal when locking
+        // show password modal when locking.
         const modal = document.getElementById('password-modal');
         modal.style.display = 'block';
     }

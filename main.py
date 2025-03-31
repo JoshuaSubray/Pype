@@ -27,7 +27,12 @@ except Exception as e:
     print(f"Failed to connect to MongoDB: {e}")
 
 # stores active rooms with member count and message history.
-rooms = {}
+rooms = {
+    "GENERAL": {"members": 0, "messages": [], "locked": False, "permanent": True, "creator": "Server"},
+    "GAMING": {"members": 0, "messages": [], "locked": False, "permanent": True, "creator": "Server"},
+    "POLITICS": {"members": 0, "messages": [], "locked": False, "permanent": True, "creator": "Server"},
+}
+
 
 # generates a unique 4-letter room code.
 def generate_unique_code(length):
@@ -56,7 +61,7 @@ def home():
         code = request.form.get("code") # get room code input.
         join = request.form.get("join", False) # checks if user wants to join a room.
         create = request.form.get("create", False) # checks if user wants to create a new room.
-        password = request.form.get("password", "")  # Add password field for locked rooms
+        password = request.form.get("password", "") # Add password field for locked rooms
 
         # input validation.
         if not name:
@@ -66,18 +71,16 @@ def home():
             return render_template("home.html", error="Please enter room code.", code=code, name=name, available_rooms=list(rooms.keys()))
         
         room = code
-        if create != False: # creates a new room.
+        if create != False:  # creates a new room.
+            if code in rooms and rooms[code]["permanent"]:
+                return render_template("home.html", error="Cannot create a room with the same name as a permanent room.", code=code, name=name, available_rooms=list(rooms.keys()))
             room = generate_unique_code(4)
-            rooms[room] = {"members": 0, "messages": [], "locked" : False, "password" : "", "creator" : name}
-        elif code not in rooms: # check if the room already exists.
+            rooms[room] = {"members": 0, "messages": [], "locked": False, "password": "", "creator": name, "permanent": False}
+        elif code not in rooms:  # check if the room already exists.
             return render_template("home.html", error="Room not found.", code=code, name=name, available_rooms=list(rooms.keys()))
-        elif rooms[code]["locked"]:  # Check if room is locked
-            if password != rooms[code]["password"]:  # Verify password
-                return render_template("home.html", 
-                    error="Incorrect password.", 
-                    code=code, 
-                    name=name,
-                    show_password_field=True)
+        elif rooms[code]["locked"]:  # check if room is locked.
+            if password != rooms[code]["password"]:  # verify password.
+                return render_template("home.html", error="Incorrect password.", code=code, name=name, show_password_field=True)
         
         # store room and username in session data and redirect to chat room page.
         session["room"] = room
@@ -186,7 +189,7 @@ def disconnect():
     name = session.get("name")
     leave_room(room) # remove user from the room
 
-    if room in rooms:
+    if room in rooms and not rooms[room]["permanent"]:
         rooms[room]["members"] -= 1 # decrease the member count.
         if rooms[room]["members"] <= 0: # delete room if empty.
             del rooms[room]
@@ -201,7 +204,7 @@ def handle_leave_room():
     name = session.get("name")
     if room and name:
         leave_room(room)
-        if room in rooms:
+        if room in rooms and not rooms[room].get("permanent", False): # permanent rooms do not get deleted.
             rooms[room]["members"] -= 1
             send({"name": name, "message": "has left the room"}, to=room)
             if rooms[room]["members"] <= 0:
