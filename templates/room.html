@@ -2,6 +2,10 @@
 <div class="message-box">
     <h2>Chat Room: {{code}}</h2>
     <div class="room-controls">
+        <button id="members-btn" class="members-btn" onclick="showMembers()">
+            <i class="bi bi-people-fill"></i>
+            <span id="members-text">Members</span>
+        </button>
         <button id="lock-btn" class="lock-btn" onclick="toggleRoomLock()">
             <span id="lock-icon">🔐</span>
             <span id="lock-text">Lock Room</span>

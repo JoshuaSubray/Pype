@@ -185,13 +185,13 @@ body {
     border: var(--custom-border);
     border-radius: 12px;
     background-color: var(--custom-card-bg);
-    height: 70vh;
+    height: 80vh; /* Increased from 70vh */
+    min-height: 600px; /* Added minimum height */
     display: flex;
     flex-direction: column;
-    width: 90vw;
-    max-width: 800px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    /* Remove overflow: hidden */
+    width: 95vw; /* Increased from 90vw */
+    max-width: 1000px; /* Increased from 800px */
+    box-shadow: var(--custom-shadow);
   }
 
   .message-box-header {
@@ -204,37 +204,37 @@ body {
   }
   
   .messages {
-    overflow-y: auto;  /* Already present - keep this */
+    overflow-y: auto;
     flex: 1;
     width: 100%;
-    padding: 20px;
-    background-color: #fafafa;
-    
-    /* Add scroll momentum for smoother scrolling */
+    padding: 25px; /* Increased from 20px */
+    background-color: var(--custom-card-bg);
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    max-height: calc(100% - 150px);
   }
   
   /* Input Area */
   .inputs {
-    padding: 15px;
+    padding: 20px; /* Increased from 15px */
     display: flex;
-    gap: 10px;
-    background-color: white;
-    border-top: 1px solid #eee;
+    gap: 15px; /* Increased from 10px */
+    background-color: var(--custom-card-bg);
+    border-top: 1px solid var(--custom-border);
   }
   
   #message {
     flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 15px 20px; /* Increased from 12px 15px */
+    border: 1px solid var(--custom-border);
+    border-radius: 8px;
     font-size: 16px;
   }
   
   #send-btn {
-    padding: 12px 20px;
+    padding: 15px 25px;
     background-color: #4285f4;
+    font-size: 1rem;
     color: white;
     border: none;
     border-radius: 6px;
@@ -347,14 +347,20 @@ body {
   
   /* Responsive Adjustments */
   @media (max-width: 768px) {
-    .message-box, .local-rooms {
-      width: 95vw;
+    .message-box {
+        height: 85vh; /* Even taller on mobile */
+        width: 98vw; /* Use more screen space */
+        min-height: auto; /* Remove fixed min-height */
     }
     
-    #room-list {
-      grid-template-columns: 1fr;
+    .messages {
+        padding: 15px;
     }
-  }
+    
+    .inputs {
+        padding: 15px;
+    }
+}
 
 .theme-toggle {
     position: fixed;
@@ -479,4 +485,30 @@ body {
 
 .join-room-btn:hover {
   background: var(--custom-primary-hover);
+}
+
+.members-btn {
+  background: var(--custom-secondary);
+  color: var(--custom-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--custom-shadow);
+  font-size: 0.95rem;
+  margin-right: 10px; /* Space between buttons */
+}
+
+.members-btn:hover {
+  background: var(--custom-secondary-hover);
+  transform: translateY(-2px);
+}
+
+.members-btn i {
+  font-size: 1.1rem;
 }
