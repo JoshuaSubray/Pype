@@ -2,10 +2,18 @@
 <div class="message-box">
     <h2>Chat Room: {{code}}</h2>
     <div class="room-controls">
+        <button id="members-btn" class="members-btn" onclick="showMembers()">
+            <i class="bi bi-people-fill"></i>
+            <span id="members-text">Members</span>
+        </button>
         <button id="lock-btn" class="lock-btn" onclick="toggleRoomLock()">
-            <span id="lock-icon">🔓</span> <span id="lock-text">Lock Room</span>
-        </button>   
-    <button onclick="leaveRoom()" class="leave-btn"><i class="bi bi-box-arrow-right"></i>Leave Room</button>
+            <span id="lock-icon">🔐</span>
+            <span id="lock-text">Lock Room</span>
+        </button>
+    </div>
+    <div>
+        <button onclick="leaveRoom()" class="leave-btn"><i class="bi bi-box-arrow-right"></i>Leave Room</button>
+    </div>
     <div class="messages" id="messages"></div>
     <div class="inputs">
         <input
@@ -32,12 +40,55 @@
     </div>
 </div>
 
+<div id="members-modal" class="modal">
+    <div class="modal-content">
+        <h3>Room Members ({{code}})</h3>
+        <div id="members-list" class="members-list">
+            <!-- Members will be populated here -->
+        </div>
+        <div class="modal-buttons">
+            <button onclick="closeMembersModal()">Close</button>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var socketio = io();
     const roomCode = "{{code}}";
     const userName = "{{session.get('name')}}";
 
     let isCreator = false;
+
+    function showMembers() {
+        fetch(`/api/room/${roomCode}/members`)
+            .then(res => res.json())
+            .then(data => {
+                const membersList = document.getElementById('members-list');
+                membersList.innerHTML = '';
+                
+                data.members.forEach(member => {
+                    const div = document.createElement('div');
+                    div.className = 'member-item';
+                    div.innerHTML = `
+                        <span>${member.name}</span>
+                        ${member.is_creator ? '<span class="creator-badge">Creator</span>' : ''}
+                    `;
+                    membersList.appendChild(div);
+                });
+                
+                document.getElementById('members-modal').style.display = 'block';
+            });
+    }
+
+    function closeMembersModal() {
+        document.getElementById('members-modal').style.display = 'none';
+    }
+
+    socketio.on("member_update", (members) => {
+        if(document.getElementById('members-modal').style.display === 'block') {
+            showMembers(); // Refresh if modal is open
+        }
+    });
 
     fetch(`/api/room/${roomCode}`)
         .then(res => res.json())
@@ -56,10 +107,10 @@
         const lockText = document.getElementById('lock-text');
         
         if (isLocked) {
-            lockIcon.textContent = '🔐';
+            lockIcon.textContent = '🔓';
             lockText.textContent = 'Unlock Room';
         } else {
-            lockIcon.textContent = '🔓';
+            lockIcon.textContent = '🔐';
             lockText.textContent = 'Lock Room';
         }
     }
