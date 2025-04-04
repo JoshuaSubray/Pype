@@ -211,6 +211,23 @@ def handle_leave_room():
                 del rooms[room]
         session.clear()
 
+# handles message fetching.
+@app.route("/api/room/<room_code>/messages")
+def get_messages(room_code):
+    if room_code not in rooms:
+        return jsonify({"error": "Room not found"}), 404
+
+    # Fetch messages.
+    if mongo:
+        history = list(mongo.db.rooms.find({"room": room_code}).sort("timestamp", 1))
+    else:
+        history = rooms[room_code]["messages"]
+
+    for msg in history:
+        if '_id' in msg:
+            msg['_id'] = str(msg['_id'])
+    return jsonify(history)
+
 @app.route("/clear_session")
 def clear_session():
     session.clear()

@@ -149,8 +149,26 @@
 
 <!-- dynamically call createMessage for every message in message history. -->
 {% for msg in messages %}
-<script type ="text/javascript">
-    createMessage("{{msg.name}}", "{{msg.message}}")
+<script type="text/javascript">
+    const messagesContainer = document.getElementById("messages");
+
+    // fetch messages from the new endpoint.
+    function refreshMessages() {
+        fetch(`/api/room/${roomCode}/messages`)
+            .then(response => response.json())
+            .then(data => {
+                // clear current messages to avoid duplicates.
+                messagesContainer.innerHTML = '';
+                // loop through the messages and add them to the chat.
+                data.forEach(msg => {
+                    createMessage(msg.name, msg.message);
+                });
+            })
+            .catch(error => console.error('Error fetching messages:', error));
+    }
+
+    // refresh messages every 1 second.
+    setInterval(refreshMessages, 1000);
 </script>
 {% endfor %}
 {% endblock %}
