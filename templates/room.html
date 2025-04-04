@@ -12,13 +12,14 @@
         </button>
     </div>
     <div>
-        <button onclick="leaveRoom()" class="leave-btn"><i class="bi bi-box-arrow-right"></i>Leave Room</button>
+        <button onclick="leaveRoom()" class="leave-btn">
+            <i class="bi bi-box-arrow-right"></i>Leave Room
+        </button>
     </div>
     <div class="messages" id="messages"></div>
     <div class="inputs">
         <input
             type="text"
-            rows="3"
             placeholder="Message"
             name="message"
             id="message"
@@ -99,8 +100,8 @@
             // hide lock button if not creator.
             if (!isCreator) {
                 document.getElementById('lock-btn').style.display = 'none';
-        }
-    });
+            }
+        });
 
     function updateLockButton(isLocked) {
         const lockIcon = document.getElementById('lock-icon');
@@ -154,32 +155,12 @@
         document.getElementById('room-password').value = '';
     }
 
-    const messages = document.getElementById("messages");
-
-    const createMessage = (name, msg) => {
-        const content = `
-        <div class="text">
-            <span>
-                <strong>${name}</strong>: ${msg}
-            </span>
-            <span class="muted">
-                ${new Date().toLocaleString()}
-            </span>
-        </div>
-        `;
-        messages.innerHTML += content;
-    };
-
-    socketio.on("message", (data) => {
-        createMessage(data.name, data.message);
-    })
-
     const sendMessage = () => {
-        const message = document.getElementById("message")
+        const message = document.getElementById("message");
         if (message.value === "") return;
-        socketio.emit("message", {data: message.value})
+        socketio.emit("message", {data: message.value});
         message.value = "";
-    }
+    };
 
     document.getElementById("message").addEventListener("keydown", (event) => {
         if (event.key === "Enter" && !event.shiftKey) {
@@ -194,16 +175,27 @@
           .then(() => {
             window.location.href = "{{ url_for('home') }}";
           });
-      };
-
+    };
 </script>
 
-<!-- dynamically call createMessage for every message in message history. -->
-{% for msg in messages %}
+<!-- dynamically refresh every message in message history. -->
 <script type="text/javascript">
     const messagesContainer = document.getElementById("messages");
+    const createMessage = (name, msg, timestamp) => {
+        const content = `
+        <div class="text">
+            <span>
+                <strong>${name}</strong>: ${msg}
+            </span>
+            <span class="muted">
+                ${timestamp}
+            </span>
+        </div>
+        `;
+        messagesContainer.innerHTML += content;
+    };
 
-    // fetch messages from the new endpoint.
+    // refresh messages function.
     function refreshMessages() {
         fetch(`/api/room/${roomCode}/messages`)
             .then(response => response.json())
@@ -212,14 +204,14 @@
                 messagesContainer.innerHTML = '';
                 // loop through the messages and add them to the chat.
                 data.forEach(msg => {
-                    createMessage(msg.name, msg.message);
+                    const time = msg.timestamp ? new Date(msg.timestamp).toLocaleString() : new Date().toLocaleString();
+                    createMessage(msg.name, msg.message, time);
                 });
             })
             .catch(error => console.error('Error fetching messages:', error));
     }
 
-    // refresh messages every 1 second.
+    // refresh messages every second.
     setInterval(refreshMessages, 1000);
 </script>
-{% endfor %}
 {% endblock %}
