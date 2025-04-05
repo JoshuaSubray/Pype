@@ -63,11 +63,22 @@
         </script>
     </head>
     <body>
+        <!-- theme button. -->
         <button onclick="toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
             <i id="theme-icon" class="bi"></i>
             <span id="theme-text" class="theme-text">Light Theme</span>
         </button>
+        <button onclick="toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
+            <i id="theme-icon" class="bi"></i>
+            <span id="theme-text" class="theme-text">Light Theme</span>
+        </button >
+
+        <!-- github button. -->
+        <a href="https://github.com/JoshuaSubray/Pype">
+            GitHub
+        </a>
+    
+
         <div class="content">{% block content %}{% endblock %}</div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
